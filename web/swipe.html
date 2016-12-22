@@ -14,6 +14,24 @@
 <body>
 
 <style>
+body {
+    overflow: hidden;
+}
+
+body * {
+   -webkit-touch-callout: none;
+     -webkit-user-select: none;
+        -moz-user-select: none;
+         -ms-user-select: none;
+             user-select: none;
+}
+
+.map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}
 .map-overlay {
     font:bold 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     position: absolute;
@@ -45,48 +63,38 @@
     cursor: ew-resize;
 }
 </style>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.1.0/mapbox-gl-compare.css' type='text/css' />
 
-<div id='map'></div>
-
+<div id='before' class='map'></div>
+<div id='after' class='map'></div>
 <div class='map-overlay top'>
     <div class='map-overlay-inner'>
         <p> 대경성정도(大京城精圖) 1936년, 1:6000
-            <a href="swipe.html">swipe mode</a>
+            <a href="index.html">overlay mode</a>
         </p>
-        <label>overlay opacity: <span id='slider-value'>5%</span></label>
-        <input id='slider' type='range' min='0' max='100' step='0' value='5' />
     </div>
 </div>
 
 <script>
 mapboxgl.accessToken = 'pk.eyJ1IjoiYWhnbm95IiwiYSI6ImZIcGRiZjgifQ.pL1SaB8gHyl-L2yolSl5Qw';
-var map = new mapboxgl.Map({
-    container: 'map',
+var beforeMap = new mapboxgl.Map({
+    container: 'before',
     style: 'mapbox://styles/ahgnoy/ciwzci3sd002a2pmqyfmftq42',
+    center: [0, 0],
+    zoom: 0
 });
 
-var slider = document.getElementById('slider');
-var sliderValue = document.getElementById('slider-value');
+var afterMap = new mapboxgl.Map({
+    container: 'after',
+    style: 'mapbox://styles/mapbox/satellite-streets-v9',
+    center: [0, 0],
+    zoom: 0
+});
 
-map.on('load', function() {
-
-    // Add source/layers
-    map.addSource('seoul', {
-        "type": "raster",
-        "url": "mapbox://mapbox.satellite"
-    });
-
-    map.addLayer({
-        "id": "seoul",
-        "source": "seoul",
-        "type": "raster"
-    });
-    map.setPaintProperty('seoul', 'raster-opacity', 0.05);
-
-    slider.addEventListener('input', function(e) {
-        map.setPaintProperty('seoul', 'raster-opacity', parseInt(e.target.value, 10) / 100);
-        sliderValue.textContent = e.target.value + '%';
-    });
+var map = new mapboxgl.Compare(beforeMap, afterMap, {
+    // Set this to enable comparing two maps by mouse movement:
+    // mousemove: true
 });
 </script>
 

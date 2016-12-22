@@ -1,0 +1,9 @@
+{
+    "type": "sftp",
+    "host": "sftp.itd.umich.edu",
+    "username": "yonghah",
+    "password": "",
+    "port": 22,
+    "remotePath": "~/Public/html",
+    "uploadOnSave": false
+}
